@@ -2,3 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fix Drawer DaisyUI, see https://github.com/saadeghi/daisyui/issues/2859 */
+html {
+    scrollbar-gutter: auto !important;
+}
+
+html:has(body.content-overflow-y) {
+    scrollbar-gutter: stable !important;
+}
