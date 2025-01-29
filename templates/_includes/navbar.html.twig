@@ -1,0 +1,44 @@
+<div class="navbar bg-base-100">
+    <div class="navbar-start">
+        <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                {{ ux_icon('solar:hamburger-menu-linear', {class: 'w-5 h-5'}) }}
+            </div>
+            <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                <li>
+                    <a>
+                        {{ ux_icon('solar:tennis-linear', {class: 'w-4 h-4'}) }} Accueil
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        {{ ux_icon('solar:calendar-linear', {class: 'w-4 h-4'}) }} Calendrier
+                    </a>
+                </li>
+                <li>
+                    <a>{{ ux_icon('solar:cup-outline', {class: 'w-4 h-4'}) }} Résultats</a>
+                </li>
+                <li>
+                    <a>
+                        {{ ux_icon('solar:users-group-two-rounded-linear', {class: 'w-4 h-4'}) }} Joueurs
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        {{ ux_icon('solar:ranking-linear', {class: 'w-4 h-4'}) }} Classement
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="navbar-center">
+        <a href="/" class="">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-12">
+        </a>
+    </div>
+    <div class="navbar-end">
+        <button class="btn btn-ghost btn-circle">
+            {{ ux_icon('solar:magnifer-linear', {class: 'w-5 h-5'}) }}
+        </button>
+    </div>
+</div>
