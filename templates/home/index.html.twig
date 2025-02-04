@@ -61,7 +61,7 @@
                                                 <div class="badge badge-outline badge-lg">ATP 500</div>
                                                 <div class="badge badge-outline badge-lg">ATP 250</div>
                                             </div>
-                                            <a href="/atp" class="btn btn-white text-primary w-full">
+                                            <a href="{{ path('circuit_home', { type: 'atp' }) }}" class="btn btn-white text-primary w-full">
                                                 Explorer l'ATP
                                                 {{ ux_icon('solar:arrow-right-linear', {class: 'w-5 h-5 ml-2'}) }}
                                             </a>
@@ -85,7 +85,7 @@
                                                 <div class="badge badge-outline badge-lg">Circuit Junior</div>
                                                 <div class="badge badge-outline badge-lg">Circuit Féminin</div>
                                             </div>
-                                            <a href="/itf" class="btn btn-white text-secondary w-full">
+                                            <a href="{{ path('circuit_home', { type: 'itf' }) }}" class="btn btn-white text-secondary w-full">
                                                 Découvrir l'ITF
                                                 {{ ux_icon('solar:arrow-right-linear', {class: 'w-5 h-5 ml-2'}) }}
                                             </a>

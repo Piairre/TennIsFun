@@ -37,6 +37,11 @@ class ItfMatchMapper implements MatchMapperInterface
                 $matchDto->setMatchStatus('unknown');
         }
 
+        // order sides by sideOrder
+        usort($matchData['sides'], function ($a, $b) {
+            return $a['sideOrder'] <=> $b['sideOrder'];
+        });
+
         foreach ($matchData['sides'] as $side) {
             $sideDto = $this->createSideDto($side);
             $matchDto->addSide($sideDto);

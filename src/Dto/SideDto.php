@@ -26,8 +26,15 @@ class SideDto
 
     public function addPlayer(PlayerDto $player): void
     {
+        foreach ($this->players as $existingPlayer) {
+            if ($existingPlayer->id === $player->id) {
+                return; // Player already exists, do not add it again
+            }
+        }
+
         $this->players->add($player);
     }
+
 
     public function addSideSet(SideSetDto $sideSet): void
     {

@@ -2,6 +2,7 @@
 
 namespace App\Mapper\Itf;
 
+use App\Dto\CountryDto;
 use App\Dto\PlayerDto;
 use App\Mapper\Interface\PlayerMapperInterface;
 
@@ -13,11 +14,16 @@ class ItfPlayerMapper implements PlayerMapperInterface
             return null;
         }
 
-        return new PlayerDto(
+        $playerDto = new PlayerDto(
             $playerData['id'],
             $playerData['person']['firstName'],
-            $playerData['person']['lastName'],
-            $playerData['person']['country']['name']
+            $playerData['person']['lastName']
         );
+
+        $countryDto = new CountryDto($playerData['person']['country']['_name'], $playerData['person']['country']['ISOcode']);
+
+        $playerDto->setCountry($countryDto);
+
+        return $playerDto;
     }
 }

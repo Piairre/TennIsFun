@@ -10,14 +10,13 @@ class PlayerDto
     public string $firstName;
     public string $lastName;
     public string $formattedName;
-    public string $countryCode;
+    public ?CountryDto $country = null;
 
-    public function __construct(string $id, string $firstName, string $lastName, string $countryCode)
+    public function __construct(string $id, string $firstName, string $lastName)
     {
         $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->countryCode = $countryCode;
         $this->formattedName = $this->formatFullName($firstName, $lastName);
     }
 
@@ -28,5 +27,10 @@ class PlayerDto
     private function formatFullName(string $firstName, string $lastName): string
     {
         return strtoupper(substr($firstName, 0, 1)) . '. ' . ucfirst($lastName);
+    }
+
+    public function setCountry(CountryDto $country): void
+    {
+        $this->country = $country;
     }
 }

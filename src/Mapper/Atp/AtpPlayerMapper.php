@@ -2,6 +2,7 @@
 
 namespace App\Mapper\Atp;
 
+use App\Dto\CountryDto;
 use App\Dto\PlayerDto;
 use App\Mapper\Interface\PlayerMapperInterface;
 
@@ -13,11 +14,19 @@ class AtpPlayerMapper implements PlayerMapperInterface
             return null;
         }
 
-        return new PlayerDto(
+        $playerDto = new PlayerDto(
             $playerData['PlayerId'],
             $playerData['PlayerFirstName'],
-            $playerData['PlayerLastName'],
+            $playerData['PlayerLastName']
+        );
+
+        $countryDto = new CountryDto(
+            $playerData['PlayerCountryName'],
             $playerData['PlayerCountry']
         );
+
+        $playerDto->setCountry($countryDto);
+
+        return $playerDto;
     }
 }
