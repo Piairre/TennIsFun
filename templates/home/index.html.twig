@@ -1,6 +1,146 @@
-{% extends './_includes/base.html.twig' %}
+{% extends '_includes/base.html.twig' %}
 
 {% block title 'Accueil' ~ parent() %}
 
 {% block body %}
+    <div class="min-h-screen bg-base-200">
+        <div class="hero bg-base-100">
+            <div class="hero-content text-center">
+                <div class="max-w-3xl">
+                    <p class="py-6 text-xl">Plongez dans l'univers du tennis professionnel ! Suivez en direct les scores, découvrez les dernières actualités, et explorez les statistiques des joueurs.</p>
+                    <div class="stats shadow mb-8">
+                        <div class="stat">
+                            <div class="stat-figure text-primary">
+                                {{ ux_icon('solar:tennis-linear', {class: 'w-8 h-8'}) }}
+                            </div>
+                            <div class="stat-title">Tournois</div>
+                            <div class="stat-value">250+</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-figure text-secondary">
+                                {{ ux_icon('solar:users-group-two-rounded-linear', {class: 'w-8 h-8'}) }}
+                            </div>
+                            <div class="stat-title">Joueurs</div>
+                            <div class="stat-value">2000+</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-figure text-accent">
+                                {{ ux_icon('solar:cup-outline', {class: 'w-8 h-8'}) }}
+                            </div>
+                            <div class="stat-title">Matchs</div>
+                            <div class="stat-value">5K+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-5">
+                    <div class="card bg-base-100 shadow-xl h-full">
+                        <div class="card-body flex flex-col justify-center items-center">
+                            <h2 class="card-title text-2xl mb-8">Choisissez votre circuit</h2>
+
+                            <label class="swap swap-flip w-full" id="mainSwap">
+                                <input type="checkbox" class="hidden" id="circuitSwitch"/>
+
+                                <div class="swap-off w-full">
+                                    <div class="card bg-primary text-primary-content">
+                                        <div class="card-body items-center text-center">
+                                            <div class="avatar mb-4">
+                                                <div class="w-24 bg-base-100 rounded-xl ring ring-primary ring-offset-base-100 ring-offset-2">
+                                                    <img src="{{ asset('images/atp.png') }}" alt="ATP Logo"/>
+                                                </div>
+                                            </div>
+                                            <h2 class="card-title text-3xl">ATP Tour</h2>
+                                            <div class="divider">Circuit professionnel masculin</div>
+                                            <div class="grid grid-cols-2 gap-4 my-4 place-items-center">
+                                                <div class="badge badge-outline badge-lg">Grand Chelem</div>
+                                                <div class="badge badge-outline badge-lg">Masters 1000</div>
+                                                <div class="badge badge-outline badge-lg">ATP 500</div>
+                                                <div class="badge badge-outline badge-lg">ATP 250</div>
+                                            </div>
+                                            <a href="/atp" class="btn btn-white text-primary w-full">
+                                                Explorer l'ATP
+                                                {{ ux_icon('solar:arrow-right-linear', {class: 'w-5 h-5 ml-2'}) }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="swap-on w-full">
+                                    <div class="card bg-secondary text-secondary-content">
+                                        <div class="card-body items-center text-center">
+                                            <div class="avatar mb-4">
+                                                <div class="w-24 bg-base-100 rounded-xl ring ring-secondary ring-offset-base-100 ring-offset-2">
+                                                    <img src="{{ asset('images/itf.png') }}" alt="ITF Logo"/>
+                                                </div>
+                                            </div>
+                                            <h2 class="card-title text-3xl">ITF Tour</h2>
+                                            <div class="divider">Circuit international</div>
+                                            <div class="grid grid-cols-2 gap-4 my-4 place-items-center">
+                                                <div class="badge badge-outline badge-lg">ITF M25</div>
+                                                <div class="badge badge-outline badge-lg">ITF M50</div>
+                                                <div class="badge badge-outline badge-lg">Circuit Junior</div>
+                                                <div class="badge badge-outline badge-lg">Circuit Féminin</div>
+                                            </div>
+                                            <a href="/itf" class="btn btn-white text-secondary w-full">
+                                                Découvrir l'ITF
+                                                {{ ux_icon('solar:arrow-right-linear', {class: 'w-5 h-5 ml-2'}) }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- Switch -->
+                            <div class="flex justify-center items-center gap-4 mt-8">
+                                <span class="text-lg font-semibold text-primary">ATP</span>
+                                <label class="swap swap-rotate">
+                                    <!-- Utilise le même input que le swap principal -->
+                                    <input type="checkbox" id="iconSwitch"/>
+                                    <div class="swap-on">{{ ux_icon('solar:tennis-linear', {class: 'w-8 h-8 text-secondary'}) }}</div>
+                                    <div class="swap-off">{{ ux_icon('solar:tennis-linear', {class: 'w-8 h-8 text-primary'}) }}</div>
+                                </label>
+                                <span class="text-lg font-semibold text-secondary">ITF</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features Cards -->
+                <div class="lg:col-span-7">
+                    <div class="card bg-base-100 shadow-xl">
+                        <div class="card-body">
+                            <h2 class="card-title text-2xl mb-8 text-center">Fonctionnalités</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <div class="card bg-base-200">
+                                    <div class="card-body items-center text-center">
+                                        {{ ux_icon('solar:calendar-linear', {class: 'w-12 h-12 text-primary mb-4'}) }}
+                                        <h3 class="card-title">Calendrier Détaillé</h3>
+                                        <p>Suivez tous les tournois à venir et planifiez votre calendrier tennis.</p>
+                                    </div>
+                                </div>
+                                <div class="card bg-base-200">
+                                    <div class="card-body items-center text-center">
+                                        {{ ux_icon('solar:cup-outline', {class: 'w-12 h-12 text-secondary mb-4'}) }}
+                                        <h3 class="card-title">Scores en Direct</h3>
+                                        <p>Restez informé des résultats en temps réel de tous les matchs.</p>
+                                    </div>
+                                </div>
+                                <div class="card bg-base-200">
+                                    <div class="card-body items-center text-center">
+                                        {{ ux_icon('solar:ranking-linear', {class: 'w-12 h-12 text-accent mb-4'}) }}
+                                        <h3 class="card-title">Statistiques Avancées</h3>
+                                        <p>Analysez les performances des joueurs avec des statistiques détaillées.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

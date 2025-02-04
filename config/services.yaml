@@ -20,5 +20,38 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Configuration spécifique pour les mappers ATP
+    App\Mapper\Atp\AtpPlayerMapper: ~
+    App\Mapper\Atp\AtpTournamentMapper: ~
+    App\Mapper\Atp\AtpMatchMapper:
+        arguments:
+            $playerMapper: '@App\Mapper\Atp\AtpPlayerMapper'
+            $tournamentMapper: '@App\Mapper\Atp\AtpTournamentMapper'
+
+    # Configuration spécifique pour les mappers ITF
+    App\Mapper\Itf\ItfPlayerMapper: ~
+    App\Mapper\Itf\ItfTournamentMapper: ~
+    App\Mapper\Itf\ItfMatchMapper:
+        arguments:
+            $playerMapper: '@App\Mapper\Itf\ItfPlayerMapper'
+            $tournamentMapper: '@App\Mapper\Itf\ItfTournamentMapper'
+
+    # Factory de mappers
+    App\Factory\MapperFactory:
+        arguments:
+            $atpPlayerMapper: '@App\Mapper\Atp\AtpPlayerMapper'
+            $itfPlayerMapper: '@App\Mapper\Itf\ItfPlayerMapper'
+            $atpMatchMapper: '@App\Mapper\Atp\AtpMatchMapper'
+            $itfMatchMapper: '@App\Mapper\Itf\ItfMatchMapper'
+
+    # Configuration des clients
+    App\Service\ATPClient:
+        arguments:
+            $client: '@http_client'
+            $mapperFactory: '@App\Factory\MapperFactory'
+            $tournamentMapper: '@App\Mapper\Atp\AtpTournamentMapper'
+
+    App\Service\ITFClient:
+        arguments:
+            $client: '@http_client'
+            $mapperFactory: '@App\Factory\MapperFactory'
