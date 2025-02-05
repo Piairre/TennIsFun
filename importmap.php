@@ -25,9 +25,6 @@ return [
     '@hotwired/turbo' => [
         'version' => '7.3.0',
     ],
-    'daisyui' => [
-        'version' => '4.12.23',
-    ],
     'postcss-js' => [
         'version' => '4.0.1',
     ],

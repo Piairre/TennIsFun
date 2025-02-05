@@ -37,12 +37,15 @@ class AtpMatchMapper implements MatchMapperInterface
             case 'P':
                 $matchDto->setMatchStatus(MatchStatusDto::STATUS_IN_PROGRESS);
                 break;
+            case 'C':
+                $matchDto->setMatchStatus(MatchStatusDto::WILL_START);
+                break;
             default:
-                $matchDto->setMatchStatus('unknown');
+                $matchDto->setMatchStatus(MatchStatusDto::STATUS_IN_PROGRESS);
         }
 
         foreach (SideDto::ATP_SIDES_KEYS as $side) {
-            $sideDto = $this->createSideDto($matchData[$side]);
+            $sideDto = $this->createSideDto($matchData, $side, $matchDto->isFinished());
             $matchDto->addSide($sideDto);
         }
 
@@ -57,12 +60,18 @@ class AtpMatchMapper implements MatchMapperInterface
             }
         }
 
+        if (!is_null($matchData['ServerTeam']) && !$matchDto->isFinished()) {
+            $matchDto->getSides()->get($matchData['ServerTeam'])->isServing(true);
+        }
+
         return $matchDto;
     }
 
-    private function createSideDto(array $sideData): SideDto
+    private function createSideDto(array $sides, string $sideKey, bool $isFinished): SideDto
     {
-        $sideDto = new SideDto();
+        $sideData = $sides[$sideKey];
+        //dd($sideData);
+        $sideDto = new SideDto($sideData['Player']['PlayerId']);
 
         foreach (PlayerDto::ATP_PLAYERS_KEYS as $player) {
             $playerDto = $this->playerMapper->fromApiResponse($sideData[$player]);
@@ -71,10 +80,28 @@ class AtpMatchMapper implements MatchMapperInterface
             }
         }
 
-        foreach ($sideData['SetScores'] as $set) {
+        $opponentSideKey = array_values(array_diff(SideDto::ATP_SIDES_KEYS, [$sideKey]))[0];
+
+        foreach ($sideData['SetScores'] as $setKey => $set) {
             if (!is_null($set['SetScore'])) {
-                $sideDto->addSideSet(new SideSetDto($set['SetScore'], $set['TieBreakScore']));
+                $tieBreakScore = $set['TieBreakScore'];
+                $opponentSideScore = $sides[$opponentSideKey]['SetScores'][$setKey];
+
+                if ($set['SetScore'] === 7 && $opponentSideScore['SetScore'] === 6) {
+                    // Tie break score is 7-6, get the opponent score and add 2
+                    $tieBreakScore = $sides[$opponentSideKey]['SetScores'][$setKey]['TieBreakScore'] + 2;
+
+                    if ($tieBreakScore < 7) {
+                        $tieBreakScore = 7;
+                    }
+                }
+
+                $sideDto->addSideSet(new SideSetDto($set['SetScore'], $tieBreakScore));
             }
+        }
+
+        if (!$isFinished) {
+            $sideDto->setGameScore($sideData['GameScore']);
         }
 
         return $sideDto;

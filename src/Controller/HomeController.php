@@ -34,8 +34,7 @@ final class HomeController extends AbstractController
 
         try {
             $matchesLive = $client->fetchLiveMatches();
-        } catch (Exception $e) {
-            dd($e);
+        } catch (Exception) {
             $matchesLive = [];
         }
 

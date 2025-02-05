@@ -22,11 +22,19 @@ class MatchDto
         $this->sides = new ArrayCollection();
     }
 
+    public function isFinished(): bool
+    {
+        return $this->matchStatus->isFinished;
+    }
+
     public function setMatchStatus(string $matchStatus): void
     {
         $this->matchStatus = new MatchStatusDto($matchStatus);
     }
 
+    /**
+     * @return Collection<SideDto>
+     */
     public function getSides(): Collection
     {
         return $this->sides;

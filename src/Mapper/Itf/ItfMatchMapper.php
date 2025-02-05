@@ -29,12 +29,16 @@ class ItfMatchMapper implements MatchMapperInterface
             $matchData['duration']
         );
 
-        switch ($matchData['matchStatus']['stateType']) {
-            case 'live':
+        $matchDto->setMatchStatus($matchData['matchStatus']['stateType']);
+        switch ($matchData['matchStatus']['name']) {
+            case 'In Progress':
                 $matchDto->setMatchStatus(MatchStatusDto::STATUS_IN_PROGRESS);
                 break;
+            case 'Coin Toss Started':
+                $matchDto->setMatchStatus(MatchStatusDto::COIN_TOSS);
+                break;
             default:
-                $matchDto->setMatchStatus('unknown');
+                $matchDto->setMatchStatus($matchData['matchStatus']['displayName']);
         }
 
         // order sides by sideOrder
@@ -43,12 +47,10 @@ class ItfMatchMapper implements MatchMapperInterface
         });
 
         foreach ($matchData['sides'] as $side) {
-            $sideDto = $this->createSideDto($side);
+            $sideDto = $this->createSideDto($side, $matchDto->isFinished());
 
-            foreach ($sideDto->getPlayers() as $player) {
-                if ($player->getId() === $matchData['currentServerSideId']) {
-                    $sideDto->isServing(true);
-                }
+            if ($sideDto->getId() === $matchData['currentServerSideId']) {
+                $sideDto->isServing(true);
             }
 
             $matchDto->addSide($sideDto);
@@ -60,9 +62,9 @@ class ItfMatchMapper implements MatchMapperInterface
         return $matchDto;
     }
 
-    private function createSideDto(array $sideData): SideDto
+    private function createSideDto(array $sideData, bool $isFinished): SideDto
     {
-        $sideDto = new SideDto();
+        $sideDto = new SideDto($sideData['id']);
 
         foreach ($sideData['sidePlayer'] as $player) {
             $playerDto = $this->playerMapper->fromApiResponse($player['player']);
@@ -71,11 +73,23 @@ class ItfMatchMapper implements MatchMapperInterface
             }
         }
 
+        // order sets by $sideData['sideSets']['setNumber']
+        usort($sideData['sideSets'], function ($a, $b) {
+            return $a['setNumber'] <=> $b['setNumber'];
+        });
+
         foreach ($sideData['sideSets'] as $set) {
             $sideDto->addSideSet(new SideSetDto($set['setScore'], $set['setTieBreakScore']));
         }
 
-        $sideDto->setGameScore($sideData['score']);
+        if (!$isFinished){
+            // Add a default side set if the match will start
+            if ($sideDto->getSideSets()->count() === 0) {
+                $sideDto->addSideSet(new SideSetDto(0, null));
+            }
+
+            $sideDto->setGameScore($sideData['score']);
+        }
 
         return $sideDto;
     }

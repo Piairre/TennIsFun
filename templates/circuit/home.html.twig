@@ -3,37 +3,59 @@
 {% block title 'Circuit ' ~ type | upper ~ parent() %}
 
 {% block body %}
+    <div class="relative w-full" data-controller="slider">
+        <button
+            data-action="click->slider#slidePrev"
+            class="absolute left-2 top-1/2 -translate-y-1/2 z-10 btn btn-circle btn-sm bg-base-100 shadow-lg">
+            {{ ux_icon('solar:alt-arrow-left-linear', {class: 'w-4 h-4'}) }}
+        </button>
 
-    <div class="flex overflow-x-auto gap-4 p-4">
-        {% for match in matchesLive %}
-            <div class="card w-80 bg-base-100 shadow-xl border">
-                <div class="card-body">
-                    <h2 class="card-title text-center">{{ match.tournament.name }}</h2>
-                    <p class="text-center text-sm text-gray-500">
-                        {{ match.round.name }} - {{ match.matchStatus.status }}
-                    </p>
-                    <div class="divider"></div>
+        <button
+            data-action="click->slider#slideNext"
+            class="absolute right-2 top-1/2 -translate-y-1/2 z-10 btn btn-circle btn-sm bg-base-100 shadow-lg">
+            {{ ux_icon('solar:alt-arrow-right-linear', {class: 'w-4 h-4'}) }}
+        </button>
 
-                    {% for side in match.sides %}
-                        <div class="flex justify-between items-center mb-2">
-                            <div>
-                                {% for player in side.players %}
-                                    <p class="font-semibold">{{ player.formattedName }}</p>
-                                {% endfor %}
-                            </div>
-                            <div class="text-lg font-bold">
-                                {{ side.sideSets|map(s => s.setScore)|join(" - ") }}
-                            </div>
+        <div class="overflow-hidden mx-12 bg-base-200 rounded-lg p-3">
+            <div id="liveContainer" class="flex gap-4 transition-transform duration-300">
+                {% for match in matchesLive %}
+                    <div class="card w-1/4 shrink-0 shadow-sm bg-base-100 text-sm p-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm font-semibold">{{ match.tournament.name | u.truncate(30, '...') }}</span>
+                            <span class="text-xs text-gray-500">
+                                {{ match.matchStatus.status }} | {{ match.duration | date('H:i') }}
+                            </span>
                         </div>
-                    {% endfor %}
+                        <div class="text-xs text-gray-500">{{ match.round.name | raw }}</div>
 
-                    <div class="card-actions justify-end">
-                        <span class="badge badge-outline">{{ match.matchStatus.status }}</span>
+                        {% for side in match.sides %}
+                            <div class="flex items-center py-1 gap-2">
+                                {% for player in side.players %}
+                                    <img src="{{ player.country.flag }}" alt="{{ player.country.countryCode }}" class="w-4 h-3">
+                                    <span class="font-medium">{{ player.formattedName | u.truncate(20, '...') }}</span>
+                                {% endfor %}
+                                {% if side.isServing %}
+                                    <div class="badge badge-info badge-xs"></div>
+                                {% endif %}
+                                <div class="ml-auto flex gap-1 w-16 justify-end text-right">
+                                    {% if side.gameScore is not null %}
+                                        <span class="badge bg-primary-300">{{ side.gameScore }}</span>
+                                    {% endif %}
+                                    {% for set in side.sideSets %}
+                                        <span class="badge badge-outline {% if set.setWon %}font-semibold{% endif %}">
+                                            {{ set.setScore }}
+                                            {% if set.setTieBreakScore is not null %}
+                                                <small><sup>{{ set.setTieBreakScore }}</sup></small>
+                                            {% endif %}
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
     </div>
-
 
 {% endblock %}

@@ -6,11 +6,18 @@ module.exports = {
   ],
   theme: {
     extend: {},
-    colors: {
-      primary: "#1d4ed8",    // Bleu ATP
-      secondary: "#7c3aed",  // Violet ITF
-      accent: "#2dd4bf",     // Turquoise pour les accents
-    }
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [{
+      maintheme: {
+        "primary": "#1d4ed8",
+        "secondary": "#7c3aed",
+        "accent": "#2dd4bf",
+        "info": "#ddde10",
+        "neutral": "#2a323c",
+        "base-100": "#ffffff",
+      },
+    }],
+  },
 }

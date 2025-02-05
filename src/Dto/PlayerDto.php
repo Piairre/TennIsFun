@@ -15,9 +15,9 @@ class PlayerDto
     public function __construct(string $id, string $firstName, string $lastName)
     {
         $this->id = $id;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->formattedName = $this->formatFullName($firstName, $lastName);
+        $this->firstName = ucfirst(strtolower($firstName));
+        $this->lastName = ucfirst(strtolower($lastName));
+        $this->formattedName = $this->formatFullName($this->firstName, $this->lastName);
     }
 
     public function getId(): string
@@ -26,7 +26,7 @@ class PlayerDto
     }
     private function formatFullName(string $firstName, string $lastName): string
     {
-        return strtoupper(substr($firstName, 0, 1)) . '. ' . ucfirst($lastName);
+        return substr($firstName, 0, 1) . '. ' . $lastName;
     }
 
     public function setCountry(CountryDto $country): void
