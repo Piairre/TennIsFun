@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Factory\MapperFactory;
 use App\Service\ATPClient;
 use App\Service\ITFClient;
 use Exception;
@@ -29,15 +30,17 @@ final class HomeController extends AbstractController
     #[Route('/{type}/home', name: 'circuit_home')]
     public function circuitIndex(string $type): Response
     {
-        $client = $type === 'atp' ? $this->atpClient : $this->itfClient;
+        $client = $type === MapperFactory::API_ATP ? $this->atpClient : $this->itfClient;
 
         try {
             $matchesLive = $client->fetchLiveMatches();
-        } catch (Exception) {
+        } catch (Exception $e) {
+            dd($e);
             $matchesLive = [];
         }
 
         return $this->render('circuit/home.html.twig', [
+            'type' => $type,
             'matchesLive' => $matchesLive,
         ]);
     }

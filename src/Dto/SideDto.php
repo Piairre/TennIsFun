@@ -11,6 +11,8 @@ class SideDto
 
     public Collection $players;
     public Collection $sideSets;
+    public ?string $gameScore = null;
+    public bool $isServing = false;
     public bool $isWinner = false;
 
     public function __construct()
@@ -44,5 +46,15 @@ class SideDto
     public function setWinner(bool $isWinner): void
     {
         $this->isWinner = $isWinner;
+    }
+
+    public function setGameScore(?string $gameScore): void
+    {
+        $this->gameScore = $gameScore;
+    }
+
+    public function isServing(bool $isServing): void
+    {
+        $this->isServing = $isServing;
     }
 }

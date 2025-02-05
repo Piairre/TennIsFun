@@ -44,6 +44,13 @@ class ItfMatchMapper implements MatchMapperInterface
 
         foreach ($matchData['sides'] as $side) {
             $sideDto = $this->createSideDto($side);
+
+            foreach ($sideDto->getPlayers() as $player) {
+                if ($player->getId() === $matchData['currentServerSideId']) {
+                    $sideDto->isServing(true);
+                }
+            }
+
             $matchDto->addSide($sideDto);
         }
 
@@ -67,6 +74,8 @@ class ItfMatchMapper implements MatchMapperInterface
         foreach ($sideData['sideSets'] as $set) {
             $sideDto->addSideSet(new SideSetDto($set['setScore'], $set['setTieBreakScore']));
         }
+
+        $sideDto->setGameScore($sideData['score']);
 
         return $sideDto;
     }

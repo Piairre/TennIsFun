@@ -1,1 +1,39 @@
-{{ dump(matchesLive) }}
+{% extends '_includes/base.html.twig' %}
+
+{% block title 'Circuit ' ~ type | upper ~ parent() %}
+
+{% block body %}
+
+    <div class="flex overflow-x-auto gap-4 p-4">
+        {% for match in matchesLive %}
+            <div class="card w-80 bg-base-100 shadow-xl border">
+                <div class="card-body">
+                    <h2 class="card-title text-center">{{ match.tournament.name }}</h2>
+                    <p class="text-center text-sm text-gray-500">
+                        {{ match.round.name }} - {{ match.matchStatus.status }}
+                    </p>
+                    <div class="divider"></div>
+
+                    {% for side in match.sides %}
+                        <div class="flex justify-between items-center mb-2">
+                            <div>
+                                {% for player in side.players %}
+                                    <p class="font-semibold">{{ player.formattedName }}</p>
+                                {% endfor %}
+                            </div>
+                            <div class="text-lg font-bold">
+                                {{ side.sideSets|map(s => s.setScore)|join(" - ") }}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="card-actions justify-end">
+                        <span class="badge badge-outline">{{ match.matchStatus.status }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

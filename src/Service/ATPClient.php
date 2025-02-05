@@ -34,7 +34,7 @@ class ATPClient extends TennisClientService
         $flareSolveResponse = $this->client->request('POST', 'http://flaresolverr:8191/v1', [
             'json' => [
                 "cmd" => "request.get",
-                "url" => "https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour",
+                "url" => "https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=challenger",
                 "maxTimeout" => 10000
             ],
         ]);
