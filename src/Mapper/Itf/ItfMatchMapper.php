@@ -37,6 +37,9 @@ class ItfMatchMapper implements MatchMapperInterface
             case 'Coin Toss Started':
                 $matchDto->setMatchStatus(MatchStatusDto::COIN_TOSS);
                 break;
+            case 'Umpire on Court':
+                $matchDto->setMatchStatus(MatchStatusDto::WILL_START);
+                break;
             default:
                 $matchDto->setMatchStatus($matchData['matchStatus']['displayName']);
         }
